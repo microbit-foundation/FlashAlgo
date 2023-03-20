@@ -1,3 +1,68 @@
+# Branch to build Flash Algo for micro:bit V2 with nRF52833 target
+
+This branch has been created to build the Flash Algo for nRF52833 that will
+be used for DAPLink, specifically for the micro:bit DAPLink build.
+
+The changes in the branch from upstream are:
+- Added unmerged PR setting GCC optimisation level to `Os`: https://github.com/pyocd/FlashAlgo/pull/67
+- Added the build output files
+- Updated this README
+
+The build was done using the `ghcr.io/microbit-foundation/daplink:2022.01.1` docker image, which uses GCC v10.3:
+
+```
+$ docker run -v $(pwd):/home --rm ghcr.io/microbit-foundation/daplink:2022.01.1 arm-none-eabi-gcc --version
+arm-none-eabi-gcc (GNU Arm Embedded Toolchain 10.3-2021.07) 10.3.1 20210621 (release)
+Copyright (C) 2020 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+```
+
+Build command and output:
+
+```
+$ docker run -v $(pwd):/home --rm ghcr.io/microbit-foundation/daplink:2022.01.1 progen build -v -t make_gcc_arm nrf52833
+progen DEBUG    This should be the project root: /home
+progen.tools DEBUG      Generating: projectfiles/make_gcc_arm/nrf52833/Makefile
+progen.project DEBUG    Building for tool: make_gcc_arm
+progen.project DEBUG    {'make_gcc_arm': {'path': 'projectfiles/make_gcc_arm/nrf52833', 'files': {'makefile': 'projectfiles/make_gcc_arm/nrf52833/Makefile'}}}
+progen.tools.gccarm DEBUG       Building make project: projectfiles/make_gcc_arm/nrf52833
+progen.tools.gccarm DEBUG       ['make', '-j', '1', 'all']
+Preprocessing ../../../source/FlashAlgo.ld
+Compiling ../../../source/nordic/nrf52833/FlashDev.c
+Compiling ../../../source/nordic/nrf52833/FlashPrg.c
+Linking build/nrf52833.elf
+Memory region         Used Size  Region Size  %age Used
+   text    data     bss     dec     hex filename
+   4604       0       0    4604    11fc build/nrf52833.elf
+   4604       0       0    4604    11fc (TOTALS)
+Converting build/nrf52833.hex
+Converting build/nrf52833.bin
+progen.tools.gccarm INFO        Built nrf52833 with the status: no errors
+```
+
+Blobs generation:
+
+```
+$ docker run -v $(pwd):/home --rm ghcr.io/microbit-foundation/daplink:2022.01.1 python scripts/generate_blobs.py projectfiles/make_gcc_arm/nrf52833/build/nrf52833.elf --blob_start 0x20000000
+Flash Device:
+  name=b'nRF52833'
+  version=0x101
+  type=1
+  start=0x0
+  size=0x80000
+  page_size=0x4
+  value_empty=0xff
+  prog_timeout_ms=100
+  erase_timeout_ms=3000
+  sectors:
+    start=0x0, size=0x80000
+    start=0x10001000, size=0x308
+```
+
+
+-----
+
 # FlashAlgo
 
 Framework for building Arm "FLM" style flash programming algorithms.

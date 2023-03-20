@@ -1,0 +1,7 @@
+_FeedWDT t 0 34
+Init T 34 4
+UnInit T 38 4
+EraseChip T 3c 2c
+EraseSector T 68 34
+ProgramPage T 9c 44
+FlashDevice R e0 10a0

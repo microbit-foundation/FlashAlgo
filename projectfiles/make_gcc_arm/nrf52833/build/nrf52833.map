@@ -1,0 +1,108 @@
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+LOAD build/FlashDev.o
+LOAD build/FlashPrg.o
+LOAD /opt/gcc-arm-none-eabi-10.3-2021.07/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp/libm.a
+LOAD /opt/gcc-arm-none-eabi-10.3-2021.07/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp/libgcc.a
+LOAD /opt/gcc-arm-none-eabi-10.3-2021.07/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp/libc.a
+LOAD /opt/gcc-arm-none-eabi-10.3-2021.07/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp/libnosys.a
+START GROUP
+LOAD /opt/gcc-arm-none-eabi-10.3-2021.07/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m/nofp/libgcc.a
+LOAD /opt/gcc-arm-none-eabi-10.3-2021.07/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp/libc.a
+END GROUP
+
+PrgCode         0x0000000000000000       0xe0
+ *(.text*)
+ .text          0x0000000000000000        0x0 build/FlashDev.o
+ .text          0x0000000000000000        0x0 build/FlashPrg.o
+ .text._FeedWDT
+                0x0000000000000000       0x34 build/FlashPrg.o
+ .text.Init     0x0000000000000034        0x4 build/FlashPrg.o
+                0x0000000000000034                Init
+ .text.UnInit   0x0000000000000038        0x4 build/FlashPrg.o
+                0x0000000000000038                UnInit
+ .text.EraseChip
+                0x000000000000003c       0x2c build/FlashPrg.o
+                0x000000000000003c                EraseChip
+ .text.EraseSector
+                0x0000000000000068       0x34 build/FlashPrg.o
+                0x0000000000000068                EraseSector
+ .text.ProgramPage
+                0x000000000000009c       0x44 build/FlashPrg.o
+                0x000000000000009c                ProgramPage
+ EXCLUDE_FILE(*FlashDev.o) *(.rodata*)
+                0x00000000000000e0                . = ALIGN (0x10)
+
+.glue_7         0x00000000000000e0        0x0
+ .glue_7        0x00000000000000e0        0x0 linker stubs
+
+.glue_7t        0x00000000000000e0        0x0
+ .glue_7t       0x00000000000000e0        0x0 linker stubs
+
+.vfp11_veneer   0x00000000000000e0        0x0
+ .vfp11_veneer  0x00000000000000e0        0x0 linker stubs
+
+.v4_bx          0x00000000000000e0        0x0
+ .v4_bx         0x00000000000000e0        0x0 linker stubs
+
+.iplt           0x00000000000000e0        0x0
+ .iplt          0x00000000000000e0        0x0 build/FlashPrg.o
+
+.igot.plt       0x00000000000000e0        0x0
+ .igot.plt      0x00000000000000e0        0x0 build/FlashPrg.o
+
+PrgData         0x00000000000000e0        0x0
+ *(.data*)
+ .data          0x00000000000000e0        0x0 build/FlashDev.o
+ .data          0x00000000000000e0        0x0 build/FlashPrg.o
+ *(.bss*)
+ .bss           0x00000000000000e0        0x0 build/FlashDev.o
+ .bss           0x00000000000000e0        0x0 build/FlashPrg.o
+ *(.got*)
+ *(COMMON)
+                0x00000000000000e0                . = ALIGN (0x10)
+
+DevDscr         0x00000000000000e0     0x111c
+ *FlashDev.o(*)
+ .rodata.FlashDevice
+                0x00000000000000e0     0x10a0 build/FlashDev.o
+                0x00000000000000e0                FlashDevice
+ .comment       0x0000000000001180       0x49 build/FlashDev.o
+                                         0x4a (size before relaxing)
+ .ARM.attributes
+                0x00000000000011c9       0x33 build/FlashDev.o
+
+.rel.dyn        0x00000000000011fc        0x0
+ .rel.iplt      0x00000000000011fc        0x0 build/FlashPrg.o
+
+/DISCARD/
+ *(.ARM.exidx)
+ *(.ARM.exidx.*)
+ *(.ARM.extab.*)
+OUTPUT(build/nrf52833.elf elf32-littlearm)
+LOAD linker stubs
+
+.comment        0x0000000000000000       0x49
+ .comment       0x0000000000000000       0x49 build/FlashPrg.o
+                                         0x4a (size before relaxing)
+
+.ARM.attributes
+                0x0000000000000000       0x33
+ .ARM.attributes
+                0x0000000000000000       0x2e build/FlashPrg.o
+
+Cross Reference Table
+
+Symbol                                            File
+EraseChip                                         build/FlashPrg.o
+EraseSector                                       build/FlashPrg.o
+FlashDevice                                       build/FlashDev.o
+Init                                              build/FlashPrg.o
+ProgramPage                                       build/FlashPrg.o
+UnInit                                            build/FlashPrg.o
